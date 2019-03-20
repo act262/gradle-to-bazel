@@ -1,0 +1,29 @@
+//buildscript {
+//    repositories {
+//        google()
+//        jcenter()
+//    }
+//}
+
+apply plugin: 'groovy'
+
+//group 'io.zcx.plugin'
+//version '1.0.0'
+
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+
+    compileOnly gradleApi()
+    compileOnly localGroovy()
+
+    implementation 'com.android.tools.build:gradle:3.2.1'
+
+    implementation 'org.apache.velocity:velocity-engine-core:2.0'
+
+}
