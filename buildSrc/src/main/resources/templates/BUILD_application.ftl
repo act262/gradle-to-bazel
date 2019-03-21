@@ -26,16 +26,21 @@ android_binary(
 
     deps = [
         '//app:jarDeps',
-        '//app:appcompat-v7-28.0.0.aar',
+        '//app:aarDeps',
     ]
 )
 
+# All jar dependencies
 java_import(
     name = 'jarDeps',
-    jars = glob(['$depsDir/*.jar'])
+    jars = glob(['build/bazel/deps/*.jar'])
 )
 
-aar_import(
-    name = 'appcompat-v7-28.0.0.aar',
-    aar = 'build/bazel/deps/appcompat-v7-28.0.0.aar'
+# All aar dependencies
+android_library(
+    name = 'aarDeps',
+
+    exports = [
+        $aarDeps
+    ]
 )

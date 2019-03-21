@@ -14,7 +14,7 @@ public class WrapperBazelPlugin implements Plugin<Project> {
             TemplateGen.generateFileWORKSPACE()
 
             rootProject.subprojects { Project project ->
-                println "wrapToBazel task exec ===> $project"
+                println "\n ======> wrapToBazel task exec =====> $project\n"
 
                 // for android application
                 project.plugins.withId('com.android.application') {
