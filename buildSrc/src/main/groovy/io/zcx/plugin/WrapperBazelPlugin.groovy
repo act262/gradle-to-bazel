@@ -11,7 +11,7 @@ public class WrapperBazelPlugin implements Plugin<Project> {
 
         rootProject.tasks.create(name: 'initBazelWrapper', group: 'BazelWrapper').doFirst {
 
-            TemplateGen.generateFileWORKSPACE()
+            TemplateGen.generateFileWORKSPACE(rootProject)
 
             rootProject.subprojects { Project project ->
                 println "\n ======> wrapToBazel task exec =====> $project\n"

@@ -1,7 +1,10 @@
+
 aar_import(
     name = '$aarName',
     aar = '$aarTarget',
     exports = [
-        $!aarExports
+        #foreach($item in $aarExports)
+        '$item',
+        #end
     ]
 )

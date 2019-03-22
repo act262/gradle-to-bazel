@@ -1,0 +1,20 @@
+
+
+
+    public static void genRules_aar_import(Project project, ResolvedDependency resolvedDependency) {
+        def name = BazelUtils.getTargetName(resolvedDependency)
+
+        def context = new VelocityContext()
+        context.put('aarName', name)
+        context.put('aarTarget', BazelUtils.getTargetPath(project.projectDir, DependenciesUtils.getArtifactFile(project, resolvedDependency.moduleArtifacts[0])))
+
+        def aarExports = ''
+
+        resolvedDependency.children.each {
+            aarExports += "'${BazelUtils.getTargetName(it)}',\n"
+        }
+        context.put('aarExports', aarExports)
+        def writer = new PrintWriter("${BazelUtils.getBazelDepsDir(project)}/${Constants.FD_AAR_IMPORT}/${name}.bazel")
+        engine.mergeTemplate("aar_import.ftl", "UTF-8", context, writer)
+        writer.close()
+    }

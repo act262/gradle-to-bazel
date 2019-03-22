@@ -25,14 +25,15 @@ android_binary(
     dex_shards = 25,
 
     deps = [
-        '//app:jarDeps',
-        '//app:aarDeps',
+        'jarDeps',
+        'aarDeps',
     ]
 )
 
 # All jar dependencies
 java_import(
     name = 'jarDeps',
+
     jars = glob(['build/bazel/deps/*.jar'])
 )
 
@@ -41,6 +42,11 @@ android_library(
     name = 'aarDeps',
 
     exports = [
-        $aarDeps
+        #foreach($item in $aarDeps)
+        '$item',
+        #end
     ]
 )
+
+# Other dep
+
