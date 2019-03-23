@@ -8,7 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import io.micro.module1.Utils;
 
 public class MainActivity extends Activity {
 
@@ -17,10 +18,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(this, "world", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "world", Toast.LENGTH_SHORT).show();
 
+        Utils.showToast("show msg from module1");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

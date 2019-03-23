@@ -1,6 +1,7 @@
 package io.zcx.plugin
 
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.LibraryExtension
 import io.zcx.plugin.model.ResolvedAarDependency
 import io.zcx.plugin.util.BazelUtils
 import io.zcx.plugin.util.DependenciesUtils
@@ -79,6 +80,10 @@ public class TemplateGen {
         project.configurations.api.setCanBeResolved(true)
 
         Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
+
+        resolvedDependencySet.each {
+            println it
+        }
 
         // aar dependencies
         def aarDeps = resolvedDependencySet.findAll {
@@ -168,13 +173,60 @@ public class TemplateGen {
     }
 
     static void genLibraryBuild(Project project) {
-//        writeAarImportDeps(project)
-////        def android = libraryPlugin.extension as LibraryExtension
-//
-//        def context = new VelocityContext()
-//
-//        def writer = new PrintWriter("${project.projectDir}/BUILD.bazel")
-//        engine.mergeTemplate("BUILD_library.ftl", "UTF-8", context, writer)
-//        writer.close()
+        def android = project.extensions.android as LibraryExtension
+
+        def context = new VelocityContext()
+        context.put('name', BazelUtils.getBazelTargetName(project))
+        context.put('applicationId', 'io.micro.module1')
+        // for AndroidManifest value
+        context.put('minSdkVersion', 16)
+        context.put('maxSdkVersion', 28)
+        context.put('versionCode', android.defaultConfig.versionCode)
+        context.put('versionName', android.defaultConfig.versionName)
+
+        context.put('manifestFile', 'src/main/AndroidManifest.xml')
+
+        def srcDirs = ''
+        android.sourceSets.main.java.srcDirs.each { File dir ->
+            // src/main/java/**
+            def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
+            srcDirs += "'${srcDir}/**',"
+        }
+        srcDirs = "glob([$srcDirs])"
+        context.put('srcs', srcDirs)
+
+        def resDirs = ''
+        android.sourceSets.main.res.srcDirs.each { File dir ->
+            // src/main/res/**
+            def resDir = BazelUtils.getTargetPath(project.projectDir, dir)
+            resDirs += "'$resDir/**',"
+        }
+        resDirs = "glob([$resDirs])"
+        context.put('res', resDirs)
+
+        project.configurations.implementation.setCanBeResolved(true)
+        project.configurations.api.setCanBeResolved(true)
+
+        Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
+
+        resolvedDependencySet.each {
+            println it
+        }
+
+        // aar dependencies
+        def aarDeps = resolvedDependencySet.findAll {
+            DependenciesUtils.isAarDependency(it)
+        }.collect {
+            BazelUtils.getTargetName(it)
+        }.sort()
+
+        context.put('aarDeps', aarDeps)
+
+        def writer = new PrintWriter(BazelUtils.getBuildFile(project))
+
+        engine.mergeTemplate("BUILD_library.ftl", "UTF-8", context, writer)
+        writeAarImportDeps(project, resolvedDependencySet, writer)
+
+        writer.close()
     }
 }
