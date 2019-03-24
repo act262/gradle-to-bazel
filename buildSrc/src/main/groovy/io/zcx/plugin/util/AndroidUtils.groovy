@@ -18,4 +18,8 @@ class AndroidUtils {
     static boolean isAndroidLibProject(Project project) {
         project.plugins.hasPlugin("com.android.library")
     }
+
+    static boolean hasKotlinSupport(Project project) {
+        project.plugins.hasPlugin('kotlin-android')
+    }
 }

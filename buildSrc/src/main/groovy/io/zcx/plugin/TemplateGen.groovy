@@ -3,6 +3,7 @@ package io.zcx.plugin
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import io.zcx.plugin.model.ResolvedAarDependency
+import io.zcx.plugin.util.AndroidUtils
 import io.zcx.plugin.util.BazelUtils
 import io.zcx.plugin.util.DependenciesUtils
 import io.zcx.plugin.util.FileUtils
@@ -48,7 +49,7 @@ public class TemplateGen {
         def android = project.extensions.android as AppExtension
 
         def context = new VelocityContext()
-        context.put('kotlin', true)
+        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
 
         context.put('name', BazelUtils.getBazelTargetName(project))
         context.put('applicationName', project.name)
@@ -126,9 +127,13 @@ public class TemplateGen {
         def android = project.extensions.android as LibraryExtension
 
         def context = new VelocityContext()
+        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
+
         context.put('name', BazelUtils.getBazelTargetName(project))
-        context.put('applicationId', 'io.micro.module1')
-        context.put('package', 'io.micro.module1')
+
+        // TODO: get a variant type
+        def packageName = new XmlParser().parse(new File(project.projectDir, 'src/main/AndroidManifest.xml')).@package
+        context.put('package', packageName)
 
         // for AndroidManifest value
         context.put('minSdkVersion', 16)

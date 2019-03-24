@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.micro.kotlin_module.KotlinModuleActivity;
 import io.micro.module1.Utils;
 import io.zcx.plugin.wrapper.bazel.widget.RecyclerItemClick;
 
@@ -56,12 +57,17 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-                        gotoKotlin();
+//                        gotoKotlin();
+                        gotoKotlinModule();
                     }
                 }));
     }
 
     private void gotoKotlin() {
         startActivity(new Intent(this, KotlinActivity.class));
+    }
+
+    private void gotoKotlinModule() {
+        startActivity(new Intent(this, KotlinModuleActivity.class));
     }
 }
