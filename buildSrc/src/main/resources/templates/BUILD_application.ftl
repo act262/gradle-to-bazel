@@ -1,4 +1,4 @@
-# create android application
+# Create android application
 android_binary(
     name = "$name",
 
@@ -13,40 +13,21 @@ android_binary(
     },
 
     # AndroidManifest
-    manifest = "$manifestFile",
-
-    # java + kotlin sources
-    srcs = $srcs,
-
-    # res
-    resource_files = $res,
+    manifest = "$manifest",
 
     multidex = 'native',
-    dex_shards = 25,
+    dex_shards = 10,
 
     deps = [
-        'jarDeps',
-        'aarDeps',
+        'wrapper'
     ]
 )
 
-# All jar dependencies
-java_import(
-    name = 'jarDeps',
-
-    jars = glob(['build/bazel/deps/*.jar'])
-)
+#if($kotlin)
+#parse('include_kt_android_library_wrapper.ftl')
+#else
+#parse('include_android_library_wrapper.ftl')
+#end
 
 # All aar dependencies
-android_library(
-    name = 'aarDeps',
-
-    exports = [
-        #foreach($item in $aarDeps)
-        '$item',
-        #end
-    ]
-)
-
-# Other dep
 

@@ -35,6 +35,8 @@ public class TemplateGen {
         context.put('build_tools_version', '28.0.3')
         context.put('api_level', '28')
 
+        context.put('kotlin', true)
+
         def writer = new PrintWriter(BazelUtils.getWorkspaceFile(project))
 
         engine.mergeTemplate('WORKSPACE.ftl', 'UTF-8', context, writer)
@@ -46,9 +48,13 @@ public class TemplateGen {
         def android = project.extensions.android as AppExtension
 
         def context = new VelocityContext()
+        context.put('kotlin', true)
+
         context.put('name', BazelUtils.getBazelTargetName(project))
         context.put('applicationName', project.name)
         context.put('applicationId', android.defaultConfig.applicationId)
+        context.put('package', android.defaultConfig.applicationId)
+
         // for AndroidManifest value
         context.put('minSdkVersion', 16)
         context.put('maxSdkVersion', 28)
@@ -58,7 +64,7 @@ public class TemplateGen {
         context.put('buildToolsVersion', android.buildToolsVersion)
         context.put('compileSdkVersion', android.compileSdkVersion)
 
-        context.put('manifestFile', 'src/main/AndroidManifest.xml')
+        context.put('manifest', 'src/main/AndroidManifest.xml')
 
         def srcDirs = ''
         android.sourceSets.main.java.srcDirs.each { File dir ->
@@ -122,13 +128,15 @@ public class TemplateGen {
         def context = new VelocityContext()
         context.put('name', BazelUtils.getBazelTargetName(project))
         context.put('applicationId', 'io.micro.module1')
+        context.put('package', 'io.micro.module1')
+
         // for AndroidManifest value
         context.put('minSdkVersion', 16)
         context.put('maxSdkVersion', 28)
         context.put('versionCode', android.defaultConfig.versionCode)
         context.put('versionName', android.defaultConfig.versionName)
 
-        context.put('manifestFile', 'src/main/AndroidManifest.xml')
+        context.put('manifest', 'src/main/AndroidManifest.xml')
 
         def srcDirs = ''
         android.sourceSets.main.java.srcDirs.each { File dir ->

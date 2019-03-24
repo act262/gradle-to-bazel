@@ -8,7 +8,7 @@ android_library(
     custom_package ="$applicationId",
 
     # AndroidManifest
-    manifest = "$manifestFile",
+    manifest = "$manifest",
 
     # java + kotlin sources
     srcs = $srcs,

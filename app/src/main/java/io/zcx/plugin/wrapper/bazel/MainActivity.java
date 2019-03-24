@@ -1,29 +1,26 @@
 package io.zcx.plugin.wrapper.bazel;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import io.micro.module1.Utils;
+import io.zcx.plugin.wrapper.bazel.widget.RecyclerItemClick;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-
-//        Toast.makeText(this, "world", Toast.LENGTH_SHORT).show();
-
-        Utils.showToast("show msg from module1");
+        Utils.showToast("hello");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -32,9 +29,11 @@ public class MainActivity extends Activity {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_type1, viewGroup, false);
+                View inflate = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_item_type1, viewGroup, false);
                 //@formatter:off
                 return new RecyclerView.ViewHolder(inflate) {};
+                //@formatter:on
             }
 
             @Override
@@ -47,5 +46,22 @@ public class MainActivity extends Activity {
                 return 20;
             }
         });
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClick(recyclerView,
+                new RecyclerItemClick.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Utils.showToast("You click " + position);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        gotoKotlin();
+                    }
+                }));
+    }
+
+    private void gotoKotlin() {
+        startActivity(new Intent(this, KotlinActivity.class));
     }
 }

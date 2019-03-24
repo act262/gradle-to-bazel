@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name="io.zcx.plugin.wrapper.bazel.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="io.zcx.plugin.wrapper.bazel.SecondActivity" />
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".KotlinActivity" />
 
     </application>
 

@@ -11,3 +11,7 @@ android_sdk_repository(
     build_tools_version = '$build_tools_version',
     api_level = $api_level
 )
+
+#if($kotlin)
+#include('include_support_kotlin.ftl')
+#end
