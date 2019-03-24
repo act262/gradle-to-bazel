@@ -42,5 +42,5 @@ dependencies {
     implementation project(':module1')
 
     // local aar
-    implementation ':module1:1.0@aar'
+//    implementation ':module1:1.0@aar'
 }

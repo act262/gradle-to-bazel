@@ -27,7 +27,6 @@ android_binary(
     deps = [
         'jarDeps',
         'aarDeps',
-        '//module1'
     ]
 )
 

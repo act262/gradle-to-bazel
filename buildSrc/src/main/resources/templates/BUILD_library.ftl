@@ -1,7 +1,7 @@
-package(default_visibility = ["//visibility:public"])
-
 # create android library
 android_library(
+    visibility = ["//visibility:public"],
+
     name = '$name',
 
     # applicationId

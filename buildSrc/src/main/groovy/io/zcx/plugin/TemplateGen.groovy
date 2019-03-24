@@ -10,6 +10,7 @@ import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.app.VelocityEngine
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedArtifact
 import org.gradle.api.artifacts.ResolvedDependency
 
@@ -79,11 +80,18 @@ public class TemplateGen {
         project.configurations.implementation.setCanBeResolved(true)
         project.configurations.api.setCanBeResolved(true)
 
-        Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
+        // pick only project dependency
+        def projectDependency = project.configurations.implementation.dependencies.findAll {
+            it instanceof ProjectDependency
+        } as Set<ProjectDependency>
+        project.configurations.implementation.dependencies.removeAll(projectDependency)
 
-        resolvedDependencySet.each {
-            println it
+        projectDependency += project.configurations.api.dependencies.findAll {
+            it instanceof ProjectDependency
         }
+        project.configurations.api.dependencies.removeAll(projectDependency)
+
+        Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
 
         // aar dependencies
         def aarDeps = resolvedDependencySet.findAll {
@@ -92,6 +100,9 @@ public class TemplateGen {
             BazelUtils.getTargetName(it)
         }.sort()
 
+        aarDeps += projectDependency.collect { ProjectDependency dependency ->
+            BazelUtils.getBazelProjectName(dependency.dependencyProject)
+        }
         context.put('aarDeps', aarDeps)
 
 

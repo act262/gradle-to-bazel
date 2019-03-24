@@ -20,6 +20,10 @@ class BazelUtils {
         new File(project.projectDir, Constants.FN_BUILD)
     }
 
+    static String getBazelProjectName(Project project) {
+        "//${project.name}"
+    }
+
     static String getBazelTargetName(Project project) {
         project.name
     }
