@@ -7,6 +7,16 @@ import org.gradle.api.artifacts.ResolvedDependency
 class BazelUtils {
 
     /**
+     * Get a legal workspace name.
+     */
+    static String getWorkspaceName(Project rootProject) {
+        rootProject.name
+                .replace('.', '_')
+                .replace(':', '_')
+                .replace('-', '_')
+    }
+
+    /**
      * WORKSPACE
      */
     static File getWorkspaceFile(Project rootProject) {
