@@ -20,6 +20,10 @@ android {
     }
 }
 
+repositories {
+    flatDir name: 'localAAR', dirs: 'libs'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -35,27 +39,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // project
-//    implementation project(':module1')
-}
+    implementation project(':module1')
 
-
-afterEvaluate {
-//    configurations.each {
-//        it.setCanBeResolved(true)
-//        it.resolvedConfiguration.resolvedArtifacts.each { artifact ->
-//            println artifact
-//        }
-//    }
-
-    configurations.implementation.setCanBeResolved(true)
-    configurations.api.setCanBeResolved(true)
-
-    println configurations.implementation.getAllDependencies().each{
-        println it
-    }
-//    println configurations.implementation.getAll()
-//   println configurations.implementation.resolvedConfiguration.getResolvedArtifacts()//
-//    Set<ResolvedDependency> resolvedDependencySet = configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
-//    println resolvedDependencySet
-
+    // local aar
+    implementation ':module1:1.0@aar'
 }
