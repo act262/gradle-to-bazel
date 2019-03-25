@@ -2,6 +2,7 @@ package io.zcx.plugin.util
 
 import io.zcx.plugin.Constants
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ResolvedArtifact
 import org.gradle.api.artifacts.ResolvedDependency
 
 class BazelUtils {
@@ -60,6 +61,14 @@ class BazelUtils {
 
     static File getBazelDepsDir(Project project) {
         def depsDir = new File(getBazelDepsPath(project))
+        if (!depsDir.exists()) {
+            depsDir.mkdirs()
+        }
+        return depsDir
+    }
+
+    static File getBazelAptDir(Project project, ResolvedArtifact resolvedArtifact) {
+        def depsDir = new File("${getBazelDir(project)}/apt/${resolvedArtifact.name}")
         if (!depsDir.exists()) {
             depsDir.mkdirs()
         }

@@ -7,6 +7,36 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoAndroidLibraryModule"
+        android:text="gotoAndroidLibraryModule" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoKotlinActivity"
+        android:text="gotoKotlinActivity" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoKotlinModule"
+        android:text="gotoKotlinModule" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoButterKnife"
+        android:text="gotoButterKnife" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoSecond"
+        android:text="goto ARouter activity" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

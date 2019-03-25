@@ -20,8 +20,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".arouter.ARouterPageActivity" />
         <activity android:name=".KotlinActivity" />
+        <activity android:name=".butterknife.ButterKnifeActivity" />
 
     </application>
 

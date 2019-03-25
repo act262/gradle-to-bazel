@@ -114,6 +114,26 @@ public class TemplateGen {
         }
         context.put('aarDeps', aarDeps)
 
+        // Annotation processor
+        def apt
+        if (AndroidUtils.hasKotlinSupport(project)) {
+            project.configurations.kapt.setCanBeResolved(true)
+            apt = project.configurations.kapt.resolvedConfiguration.firstLevelModuleDependencies
+        } else {
+            project.configurations.annotationProcessor.setCanBeResolved(true)
+            apt = project.configurations.annotationProcessor.resolvedConfiguration.firstLevelModuleDependencies
+        }
+
+        def resolvedArtifactSet = new HashSet<ResolvedArtifact>(30)
+        apt.each {
+            resolvedArtifactSet += it.allModuleArtifacts
+        }
+        resolvedArtifactSet.each {
+            def file = it.file
+            def link = DependenciesUtils.getAptArtifactFile(project, it)
+
+            FileUtils.makeSureSymbolicLink(link, file)
+        }
 
         def writer = new PrintWriter(BazelUtils.getBuildFile(project))
         engine.mergeTemplate("BUILD_application.ftl", "UTF-8", context, writer)
@@ -235,7 +255,7 @@ public class TemplateGen {
         }
 
         resolvedAarDependencySet.sort().each {
-            println "resolvedAarDependency ==>  $it"
+//            println "resolvedAarDependency ==>  $it"
             def resolvedDependency = it.resolvedDependency
 
             def name = BazelUtils.getTargetName(resolvedDependency)

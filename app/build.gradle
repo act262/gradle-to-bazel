@@ -2,6 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
@@ -12,6 +19,13 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        // ARouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -53,4 +67,11 @@ dependencies {
 
     implementation project(':java_module')
     implementation project(':android_library_module')
+
+    // TODO: Not support butterknife ?
+//    implementation 'com.jakewharton:butterknife:8.8.1'
+//    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    implementation 'com.alibaba:arouter-api:1.4.1'
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

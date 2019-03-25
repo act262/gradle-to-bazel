@@ -10,18 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+
 import io.micro.android_library_module.UserCenterActivity;
 import io.micro.java_module.JavaModule;
 import io.micro.kotlin_module.KotlinModuleActivity;
+import io.micro.kotlin_module.util.ToastsKt;
 import io.micro.module1.Utils;
+import io.zcx.plugin.wrapper.bazel.arouter.RoutePaths;
+import io.zcx.plugin.wrapper.bazel.butterknife.ButterKnifeActivity;
 import io.zcx.plugin.wrapper.bazel.widget.RecyclerItemClick;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initARouter();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Utils.showToast("hello");
         JavaModule.run();
@@ -56,26 +64,40 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Utils.showToast("You click " + position);
-                        gotoAndroidLibraryModule();
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-//                        gotoKotlin();
-                        gotoKotlinModule();
+                        ToastsKt.longToast(MainActivity.this, "onItemLongClick " + position);
                     }
                 }));
     }
 
-    private void gotoKotlin() {
+    private void initARouter() {
+        ARouter.openLog();
+        ARouter.openDebug();
+        ARouter.init(getApplication());
+    }
+
+    public void gotoAndroidLibraryModule(View view) {
+        startActivity(new Intent(this, UserCenterActivity.class));
+    }
+
+    public void gotoKotlinActivity(View view) {
         startActivity(new Intent(this, KotlinActivity.class));
     }
 
-    private void gotoKotlinModule() {
+    public void gotoKotlinModule(View view) {
         startActivity(new Intent(this, KotlinModuleActivity.class));
     }
 
-    private void gotoAndroidLibraryModule() {
-        startActivity(new Intent(this, UserCenterActivity.class));
+    public void gotoButterKnife(View view) {
+        startActivity(new Intent(this, ButterKnifeActivity.class));
+    }
+
+    public void gotoSecond(View view) {
+        ARouter.getInstance()
+                .build(RoutePaths.PAGE_AROUTER)
+                .navigation();
     }
 }
