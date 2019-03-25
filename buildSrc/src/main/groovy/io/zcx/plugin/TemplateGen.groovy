@@ -164,11 +164,18 @@ public class TemplateGen {
         project.configurations.implementation.setCanBeResolved(true)
         project.configurations.api.setCanBeResolved(true)
 
-        Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
+        // pick only project dependency
+        def projectDependency = project.configurations.implementation.dependencies.findAll {
+            it instanceof ProjectDependency
+        } as Set<ProjectDependency>
+        project.configurations.implementation.dependencies.removeAll(projectDependency)
 
-        resolvedDependencySet.each {
-            println it
+        projectDependency += project.configurations.api.dependencies.findAll {
+            it instanceof ProjectDependency
         }
+        project.configurations.api.dependencies.removeAll(projectDependency)
+
+        Set<ResolvedDependency> resolvedDependencySet = project.configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies + project.configurations.api.resolvedConfiguration.firstLevelModuleDependencies
 
         // aar dependencies
         def aarDeps = resolvedDependencySet.findAll {
@@ -176,6 +183,9 @@ public class TemplateGen {
         }.collect {
             BazelUtils.getTargetName(it)
         }.sort()
+        aarDeps += projectDependency.collect { ProjectDependency dependency ->
+            BazelUtils.getBazelProjectName(dependency.dependencyProject)
+        }
 
         context.put('aarDeps', aarDeps)
 
