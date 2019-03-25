@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.micro.android_library_module.UserCenterActivity;
 import io.micro.java_module.JavaModule;
 import io.micro.kotlin_module.KotlinModuleActivity;
 import io.micro.module1.Utils;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Utils.showToast("You click " + position);
+                        gotoAndroidLibraryModule();
                     }
 
                     @Override
@@ -71,5 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void gotoKotlinModule() {
         startActivity(new Intent(this, KotlinModuleActivity.class));
+    }
+
+    private void gotoAndroidLibraryModule() {
+        startActivity(new Intent(this, UserCenterActivity.class));
     }
 }

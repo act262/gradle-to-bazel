@@ -52,4 +52,5 @@ dependencies {
     implementation project(':kotlin_module')
 
     implementation project(':java_module')
+    implementation project(':android_library_module')
 }

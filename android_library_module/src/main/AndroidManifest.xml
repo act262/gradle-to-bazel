@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.micro.android_library_module">
+
+    <application>
+        <activity android:name=".UserCenterActivity" />
+    </application>
+
+</manifest>
