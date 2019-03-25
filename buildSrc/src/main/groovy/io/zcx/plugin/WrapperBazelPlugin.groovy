@@ -27,7 +27,9 @@ public class WrapperBazelPlugin implements Plugin<Project> {
                 }
 
                 // for java library
-                // TODO: ???
+                project.plugins.withId('java-library') {
+                    TemplateGen.genJavaLibraryBuild(project)
+                }
             }
         }
 

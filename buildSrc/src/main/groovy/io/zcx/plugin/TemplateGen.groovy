@@ -254,4 +254,20 @@ public class TemplateGen {
             flattenDependency(container, it)
         }
     }
+
+
+    static void genJavaLibraryBuild(Project project) {
+
+        def context = new VelocityContext()
+        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
+
+        context.put('name', BazelUtils.getBazelTargetName(project))
+
+        // TODO: other dep
+
+        def writer = new PrintWriter(BazelUtils.getBuildFile(project))
+        engine.mergeTemplate("BUILD_java_library.ftl", "UTF-8", context, writer)
+
+        writer.close()
+    }
 }

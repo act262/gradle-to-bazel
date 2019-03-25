@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.micro.java_module.JavaModule;
 import io.micro.kotlin_module.KotlinModuleActivity;
 import io.micro.module1.Utils;
 import io.zcx.plugin.wrapper.bazel.widget.RecyclerItemClick;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Utils.showToast("hello");
+        JavaModule.run();
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
