@@ -1,4 +1,4 @@
-package io.zcx.plugin.model
+package io.zcx.plugin.bazel.model
 
 import org.gradle.api.artifacts.ResolvedDependency
 

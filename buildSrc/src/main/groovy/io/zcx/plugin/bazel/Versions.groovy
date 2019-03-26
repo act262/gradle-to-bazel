@@ -1,4 +1,4 @@
-package io.zcx.plugin
+package io.zcx.plugin.bazel
 
 import com.android.builder.model.Version
 import org.gradle.util.VersionNumber

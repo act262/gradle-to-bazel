@@ -1,4 +1,4 @@
-package io.zcx.plugin.util
+package io.zcx.plugin.bazel.util
 
 import org.apache.commons.io.FilenameUtils
 

@@ -33,7 +33,7 @@ allprojects {
     }
 }
 
-apply plugin: io.zcx.plugin.WrapperBazelPlugin
+apply plugin: io.zcx.plugin.bazel.GradleToBazelPlugin
 
 task clean(type: Delete) {
     delete rootProject.buildDir

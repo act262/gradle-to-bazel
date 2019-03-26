@@ -1,14 +1,14 @@
-package io.zcx.plugin
+package io.zcx.plugin.bazel
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.tasks.ManifestProcessorTask
-import io.zcx.plugin.model.ResolvedAarDependency
-import io.zcx.plugin.util.AndroidUtils
-import io.zcx.plugin.util.BazelUtils
-import io.zcx.plugin.util.DependenciesUtils
-import io.zcx.plugin.util.FileUtils
+import io.zcx.plugin.bazel.model.ResolvedAarDependency
+import io.zcx.plugin.bazel.util.AndroidUtils
+import io.zcx.plugin.bazel.util.BazelUtils
+import io.zcx.plugin.bazel.util.DependenciesUtils
+import io.zcx.plugin.bazel.util.FileUtils
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.app.VelocityEngine

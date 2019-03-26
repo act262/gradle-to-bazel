@@ -1,33 +1,33 @@
-package io.zcx.plugin.task
+package io.zcx.plugin.bazel.task
 
 import com.android.build.gradle.api.ApplicationVariant
-import io.zcx.plugin.TemplateGen
-import org.gradle.api.DefaultTask
+import io.zcx.plugin.bazel.TemplateGen
+import io.zcx.plugin.bazel.task.AbstractBazelGradleTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskAction
 
 import javax.inject.Inject
 
-class InitBazelTask extends DefaultTask {
+class GenerateBazelTask extends AbstractBazelGradleTask {
 
     Project rootProject
     ApplicationVariant variant
 
     @Inject
-    InitBazelTask(Project rootProject, ApplicationVariant variant) {
+    GenerateBazelTask(Project rootProject, ApplicationVariant variant) {
         this.rootProject = rootProject
         this.variant = variant
 
-        setGroup('BazelWrapper')
         setDescription("Initial Bazel task for ${variant.name}")
     }
 
-    @TaskAction
+    @Override
     void doTask() {
+        println "====================>  ${name} task exec start  <========================"
+
         TemplateGen.genWorkspace(rootProject)
 
         rootProject.subprojects { Project project ->
-            println "\n ======> wrapToBazel task exec =====> $project\n"
+            println "============> $project"
 
             // for android application
             project.plugins.withId('com.android.application') {
@@ -44,5 +44,7 @@ class InitBazelTask extends DefaultTask {
                 TemplateGen.genJavaLibraryBuild(project)
             }
         }
+
+        println "====================>  ${name} task exec end  <========================"
     }
 }

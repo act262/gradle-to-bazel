@@ -1,18 +1,16 @@
-package io.zcx.plugin
+package io.zcx.plugin.bazel.task
 
-import io.zcx.plugin.util.BazelUtils
-import org.gradle.api.DefaultTask
+
+import io.zcx.plugin.bazel.util.BazelUtils
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskAction
 
-class CleanBazelWrapperTask extends DefaultTask {
-    CleanBazelWrapperTask() {
+/**
+ * Clean WORKSPACE, BUILD.bazel, deps ..
+ */
+class CleanBazelBuildTask extends AbstractBazelGradleTask {
 
-        setGroup('BazelWrapper')
-    }
-
-    @TaskAction
-    public void doTask() {
+    @Override
+    void doTask() {
         println "Clean task start..."
 
         // clean all bazel directory and bazel files

@@ -1,4 +1,4 @@
-package io.zcx.plugin.util
+package io.zcx.plugin.bazel.util
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.AndroidSourceSet

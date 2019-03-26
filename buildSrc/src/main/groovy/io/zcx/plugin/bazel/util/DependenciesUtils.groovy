@@ -1,4 +1,5 @@
-package io.zcx.plugin.util
+package io.zcx.plugin.bazel.util
+
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ResolvedArtifact

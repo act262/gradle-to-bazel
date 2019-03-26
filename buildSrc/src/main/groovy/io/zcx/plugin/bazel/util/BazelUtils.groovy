@@ -1,6 +1,6 @@
-package io.zcx.plugin.util
+package io.zcx.plugin.bazel.util
 
-import io.zcx.plugin.Constants
+import io.zcx.plugin.bazel.Constants
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ResolvedArtifact
 import org.gradle.api.artifacts.ResolvedDependency

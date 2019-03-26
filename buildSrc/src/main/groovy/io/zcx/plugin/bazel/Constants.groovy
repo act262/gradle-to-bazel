@@ -1,4 +1,4 @@
-package io.zcx.plugin
+package io.zcx.plugin.bazel
 
 class Constants {
 
