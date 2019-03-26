@@ -37,6 +37,8 @@ android {
 }
 
 repositories {
+    mavenLocal()
+
     flatDir name: 'localAAR', dirs: 'libs'
 }
 
@@ -68,10 +70,12 @@ dependencies {
     implementation project(':java_module')
     implementation project(':android_library_module')
 
-    // TODO: Not support butterknife ?
-//    implementation 'com.jakewharton:butterknife:8.8.1'
-//    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    // Annotation processor
+    implementation 'com.jakewharton:butterknife:8.8.1'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    implementation 'com.alibaba:arouter-api:1.4.1'
+    implementation 'com.alibaba:arouter-api:1.5.0'
+    implementation 'com.alibaba:arouter-annotation:1.0.6'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 }

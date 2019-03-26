@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
 import io.zcx.plugin.wrapper.bazel.R;
 
-//import butterknife.BindView;
-//import butterknife.ButterKnife;
-//import butterknife.OnClick;
-
 /**
- * TODO: Not support ?
+ * Test AnnotationProcessor
  */
 public class ButterKnifeActivity extends AppCompatActivity {
 
@@ -23,7 +20,7 @@ public class ButterKnifeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_butter_knife);
 
-//        ButterKnife.bind(this);
+        ButterKnife.bind(this);
     }
 
     //    @OnClick(R.id.btn_test)

@@ -73,6 +73,8 @@ public class TemplateGen {
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**',"
         }
+        srcDirs += "'build/generated/source/**/*.java',"
+
         srcDirs = "glob([$srcDirs])"
         context.put('srcs', srcDirs)
 
@@ -169,6 +171,8 @@ public class TemplateGen {
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**',"
         }
+        srcDirs += "'build/generated/source/**/*.java',"
+
         srcDirs = "glob([$srcDirs])"
         context.put('srcs', srcDirs)
 

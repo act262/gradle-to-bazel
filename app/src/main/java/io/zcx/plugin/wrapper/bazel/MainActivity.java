@@ -10,7 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.android.arouter.core.LogisticsCenter;
 import com.alibaba.android.arouter.launcher.ARouter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import io.micro.android_library_module.UserCenterActivity;
 import io.micro.java_module.JavaModule;
@@ -76,8 +82,28 @@ public class MainActivity extends AppCompatActivity {
     private void initARouter() {
         ARouter.openLog();
         ARouter.openDebug();
+        LogisticsCenter.setExtraDexList(collectExtraDexPath("/data/local/tmp/incrementaldeployment/" + getPackageName() + "/dex"));
         ARouter.init(getApplication());
     }
+
+    private static List<String> collectExtraDexPath(String... extraDexDir) {
+        List<String> extraDexPaths = Collections.emptyList();
+        if (extraDexDir != null) {
+            extraDexPaths = new ArrayList<>();
+
+            for (String dir : extraDexDir) {
+                File dexDir = new File(dir);
+                if (dexDir.exists() && dexDir.isDirectory()) {
+                    File[] listFiles = dexDir.listFiles();
+                    for (File dexFile : listFiles) {
+                        extraDexPaths.add(dexFile.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        return extraDexPaths;
+    }
+
 
     public void gotoAndroidLibraryModule(View view) {
         startActivity(new Intent(this, UserCenterActivity.class));
