@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.micro.android_library_module.UserCenterActivity;
+import io.micro.butterknife_module.ButterKnifeModuleActivity;
 import io.micro.java_module.JavaModule;
 import io.micro.kotlin_module.KotlinModuleActivity;
 import io.micro.kotlin_module.util.ToastsKt;
@@ -125,5 +126,9 @@ public class MainActivity extends AppCompatActivity {
         ARouter.getInstance()
                 .build(RoutePaths.PAGE_AROUTER)
                 .navigation();
+    }
+
+    public void gotoButterKnifeModule(View view) {
+        startActivity(new Intent(this, ButterKnifeModuleActivity.class));
     }
 }

@@ -34,6 +34,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
@@ -71,11 +76,13 @@ dependencies {
     implementation project(':android_library_module')
 
     // Annotation processor
-    implementation 'com.jakewharton:butterknife:8.8.1'
 //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation "com.jakewharton:butterknife:$butterknife"
+    kapt "com.jakewharton:butterknife-compiler:$butterknife"
 
     implementation 'com.alibaba:arouter-api:1.5.0'
     implementation 'com.alibaba:arouter-annotation:1.0.6'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
+
+    implementation project(':butterknife_module')
 }
