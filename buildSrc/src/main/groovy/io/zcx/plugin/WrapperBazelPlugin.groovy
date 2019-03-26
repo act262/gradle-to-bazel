@@ -1,5 +1,7 @@
 package io.zcx.plugin
 
+import com.android.build.gradle.AppExtension
+import io.zcx.plugin.task.InitBazelTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -7,32 +9,23 @@ public class WrapperBazelPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project rootProject) {
+
         rootProject.tasks.create('cleanBazelWrapper', CleanBazelWrapperTask)
 
-        rootProject.tasks.create(name: 'initBazelWrapper', group: 'BazelWrapper').doFirst {
+        rootProject.subprojects { Project project ->
+            project.plugins.withId('com.android.application') {
+                println "Found $project has application."
 
-            TemplateGen.genWorkspace(rootProject)
+                def android = project.extensions.android as AppExtension
+                android.applicationVariants.all { variant ->
+                    String name = variant.name // stgDebug stgRelease
+                    def taskName = "${name}InitBazel"
+                    rootProject.tasks.create(taskName, InitBazelTask, rootProject, variant)
 
-            rootProject.subprojects { Project project ->
-                println "\n ======> wrapToBazel task exec =====> $project\n"
-
-                // for android application
-                project.plugins.withId('com.android.application') {
-                    TemplateGen.genAppBuild(project)
-                }
-
-                // for android library
-                project.plugins.withId('com.android.library') {
-                    TemplateGen.genLibraryBuild(project)
-                }
-
-                // for java library
-                project.plugins.withId('java-library') {
-                    TemplateGen.genJavaLibraryBuild(project)
+                    println " ===============> Create $taskName <=================="
                 }
             }
         }
-
     }
 
 

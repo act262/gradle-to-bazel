@@ -2,6 +2,8 @@ package io.zcx.plugin
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.gradle.tasks.ManifestProcessorTask
 import io.zcx.plugin.model.ResolvedAarDependency
 import io.zcx.plugin.util.AndroidUtils
 import io.zcx.plugin.util.BazelUtils
@@ -10,6 +12,7 @@ import io.zcx.plugin.util.FileUtils
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.app.VelocityEngine
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedArtifact
@@ -45,41 +48,70 @@ public class TemplateGen {
         writer.close()
     }
 
-    static void genAppBuild(Project project) {
+    static void genAppBuild(Project project, ApplicationVariant variant) {
         def android = project.extensions.android as AppExtension
 
         def context = new VelocityContext()
         context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
 
+
+        def androidSourceSets = AndroidUtils.collectSourceSet(android, variant)
+
+        def originManifestFile = android.sourceSets.main.manifest.srcFile
+
+        def variantName = variant.name.capitalize()
+        ManifestProcessorTask processManifestTask = project.tasks["process${variantName}Manifest"]
+        def manifestFile
+
+        if (Versions.AGP_CURRENT >= Versions.AGP_3_3_0) {
+            // Provider<RegularFile>
+            manifestFile = processManifestTask.manifestOutputFile.get().getAsFile()
+        } else if (Versions.AGP_CURRENT >= Versions.AGP_3_1_0) {
+            // 3.1.0 ~ 3.2.x             // File
+            manifestFile = new File(processManifestTask.manifestOutputDirectory, 'AndroidManifest.xml')
+        } else {
+            throw new GradleException("Not support lower AGP, current " + Versions.AGP_CURRENT)
+        }
+
+        def manifestParser = new XmlParser(false, false)
+                .parse(manifestFile)
+        def label = manifestParser.application."@android:label"
+        def minSdkVersion = manifestParser.'uses-sdk'.'@android:minSdkVersion'.text()
+        def maxSdkVersion = manifestParser.'uses-sdk'.'@android:targetSdkVersion'.text()
+
+        // package from origin AndroidManifest's package field
+        def custom_package = new XmlParser(false, false).parse(originManifestFile).@package
+
         context.put('name', BazelUtils.getBazelTargetName(project))
-        context.put('applicationName', project.name)
-        context.put('applicationId', android.defaultConfig.applicationId)
-        context.put('package', android.defaultConfig.applicationId)
+        context.put('applicationName', label)
+        context.put('applicationId', variant.applicationId)
+        context.put('package', custom_package)
 
         // for AndroidManifest value
-        context.put('minSdkVersion', 16)
-        context.put('maxSdkVersion', 28)
-        context.put('versionCode', android.defaultConfig.versionCode)
-        context.put('versionName', android.defaultConfig.versionName)
+        context.put('minSdkVersion', minSdkVersion)
+        context.put('maxSdkVersion', maxSdkVersion)
+        context.put('versionCode', variant.versionCode)
+        context.put('versionName', variant.versionName)
 
         context.put('buildToolsVersion', android.buildToolsVersion)
         context.put('compileSdkVersion', android.compileSdkVersion)
 
-        context.put('manifest', 'src/main/AndroidManifest.xml')
+        context.put('manifest', BazelUtils.getProjectTargetPath(project, manifestFile))
+
 
         def srcDirs = ''
-        android.sourceSets.main.java.srcDirs.each { File dir ->
+        androidSourceSets.collect { it.java.srcDirs }.flatten().each { File dir ->
             // src/main/java/**
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**',"
         }
-        srcDirs += "'build/generated/source/**/*.java',"
+//        srcDirs += "'build/generated/source/**/*.java',"
 
         srcDirs = "glob([$srcDirs])"
         context.put('srcs', srcDirs)
 
         def resDirs = ''
-        android.sourceSets.main.res.srcDirs.each { File dir ->
+        androidSourceSets.collect { it.res.srcDirs }.flatten().each { File dir ->
             // src/main/res/**
             def resDir = BazelUtils.getTargetPath(project.projectDir, dir)
             resDirs += "'$resDir/**',"
@@ -144,6 +176,7 @@ public class TemplateGen {
 
         writer.close()
     }
+
 
     static void genLibraryBuild(Project project) {
         def android = project.extensions.android as LibraryExtension

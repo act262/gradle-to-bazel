@@ -84,6 +84,10 @@ class BazelUtils {
         file.path.replaceFirst(dir.path, "").replaceFirst("/", "")
     }
 
+    static String getProjectTargetPath(Project project, File file) {
+        file.path.replaceFirst(project.projectDir.path, "").replaceFirst("/", "")
+    }
+
     /**
      * Use ResolvedDependency as target name, convert to valid bazel target name.
      */

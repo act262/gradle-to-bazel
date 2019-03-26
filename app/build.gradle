@@ -26,6 +26,9 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -39,6 +42,29 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
+    flavorDimensions 'api'
+
+    productFlavors {
+
+        stg1 {
+            manifestPlaceholders = [attr1: 'attr1_value_stg1', attr2: 'attr2_value_stg1']
+            applicationId = 'io.zcx.plugin.stg1'
+        }
+
+        stg2 {
+            manifestPlaceholders = [attr1: 'attr1_value_stg2', attr2: 'attr2_value_stg2']
+            applicationId = 'io.zcx.plugin.stg2'
+        }
+
+        prd {
+            manifestPlaceholders = [attr1: 'attr1_value_prd', attr2: 'attr2_value_prd']
+            applicationId = 'io.zcx.plugin.prd'
+        }
+
+    }
+
 }
 
 repositories {
