@@ -1,6 +1,7 @@
 package io.zcx.plugin.bazel.util
 
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.api.BaseVariant
 import org.gradle.api.Project
@@ -29,7 +30,7 @@ class AndroidUtils {
     /**
      * Collect all this variant's AndroidSourceSet
      */
-    static Set<AndroidSourceSet> collectSourceSet(AppExtension android, BaseVariant variant) {
+    static Set<AndroidSourceSet> collectSourceSet(BaseExtension android, BaseVariant variant) {
         def buildType = variant.buildType
         android.sourceSets.findAll {
             return it.name == 'main' ||                // main sources

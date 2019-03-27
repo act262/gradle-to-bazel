@@ -36,7 +36,7 @@ class GenerateBazelTask extends AbstractBazelGradleTask {
 
             // for android library
             project.plugins.withId('com.android.library') {
-                TemplateGen.genLibraryBuild(project)
+                TemplateGen.genLibraryBuild(project, variant)
             }
 
             // for java library

@@ -181,8 +181,9 @@ public class TemplateGen {
     }
 
 
-    static void genLibraryBuild(Project project) {
+    static void genLibraryBuild(Project project, ApplicationVariant variant) {
         def android = project.extensions.android as LibraryExtension
+        def androidSourceSets = AndroidUtils.collectSourceSet(android, variant)
 
         def context = new VelocityContext()
         context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
@@ -202,18 +203,20 @@ public class TemplateGen {
         context.put('manifest', 'src/main/AndroidManifest.xml')
 
         def srcDirs = ''
-        android.sourceSets.main.java.srcDirs.each { File dir ->
+        androidSourceSets.collect { it.java.srcDirs }.flatten().each { File dir ->
             // src/main/java/**
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**',"
         }
-        srcDirs += "'build/generated/source/**/*.java',"
+        srcDirs += "'build/generated/source/kapt/${variant.buildType.name}/**/*.java',"
+        srcDirs += "'build/generated/source/apt/${variant.buildType.name}/**/*.java',"
+        srcDirs += "'build/generated/source/r2/${variant.buildType.name}/**/*.java',"
 
         srcDirs = "glob([$srcDirs])"
         context.put('srcs', srcDirs)
 
         def resDirs = ''
-        android.sourceSets.main.res.srcDirs.each { File dir ->
+        androidSourceSets.collect { it.res.srcDirs }.flatten().each { File dir ->
             // src/main/res/**
             def resDir = BazelUtils.getTargetPath(project.projectDir, dir)
             resDirs += "'$resDir/**',"
