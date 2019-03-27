@@ -23,6 +23,13 @@ class GradleToBazelPlugin implements Plugin<Project> {
                 def android = project.extensions.android as AppExtension
                 android.applicationVariants.all { variant ->
                     String name = variant.name // stgDebug stgRelease
+                    def buildType = variant.buildType
+                    if (buildType.name == 'release') {
+                        println " skip for $name"
+                        return
+                    }
+
+
                     def taskName = "genBazel-${name}"
                     rootProject.tasks.create(taskName, GenerateBazelTask, rootProject, variant)
 

@@ -105,7 +105,10 @@ public class TemplateGen {
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**',"
         }
-//        srcDirs += "'build/generated/source/**/*.java',"
+
+        // Append annotationProcessor generate source
+        srcDirs += "'build/generated/source/kapt/${variant.name}/**/*.java',"
+        srcDirs += "'build/generated/source/apt/${variant.name}/**/*.java',"
 
         srcDirs = "glob([$srcDirs])"
         context.put('srcs', srcDirs)
