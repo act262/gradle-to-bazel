@@ -75,6 +75,8 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // if multiDexEnabled true ,should declare it
+    implementation 'com.android.support:multidex:1.0.2'
 
     // maven aar
     implementation 'com.android.support:support-v4:28.0.0'
