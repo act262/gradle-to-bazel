@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.micro.android_library_module.UserCenterActivity;
 import io.micro.butterknife_module.ButterKnifeModuleActivity;
+import io.micro.databinding_module.DatabindingModuleActivity;
 import io.micro.java_module.JavaModule;
 import io.micro.kotlin_module.KotlinModuleActivity;
 import io.micro.kotlin_module.util.ToastsKt;
@@ -130,5 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoButterKnifeModule(View view) {
         startActivity(new Intent(this, ButterKnifeModuleActivity.class));
+    }
+
+    public void gotoDatabindingModule(View view) {
+        startActivity(new Intent(this, DatabindingModuleActivity.class));
     }
 }

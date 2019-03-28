@@ -127,4 +127,6 @@ dependencies {
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 
     implementation project(':butterknife_module')
+
+    implementation project(':databinding_module')
 }

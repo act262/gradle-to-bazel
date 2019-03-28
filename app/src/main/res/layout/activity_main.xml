@@ -43,6 +43,12 @@
         android:onClick="gotoSecond"
         android:text="goto ARouter activity" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="gotoDatabindingModule"
+        android:text="databindind" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
