@@ -36,8 +36,8 @@ allprojects {
     }
 }
 
-apply plugin: io.zcx.plugin.bazel.GradleToBazelPlugin
-//apply plugin: 'io.zcx.plugin.bazel'
+//apply plugin: io.zcx.plugin.bazel.GradleToBazelPlugin
+apply plugin: 'io.zcx.plugin.bazel'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
