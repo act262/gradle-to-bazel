@@ -9,6 +9,38 @@ buildscript {
 plugins {
     id "com.jfrog.bintray" version "1.8.1"
 }
+plugins {
+    id 'java-gradle-plugin'
+    id "com.gradle.plugin-publish" version "0.10.1"
+}
+
+group plugin_group
+version plugin_version
+
+def artifactName = plugin_name
+
+gradlePlugin {
+    plugins {
+        publishPlugin {
+            id = 'io.zcx.plugin.bazel'
+            implementationClass = 'io.zcx.plugin.bazel.GradleToBazelPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/act262/gradle-to-bazel'
+    vcsUrl = 'https://github.com/act262/gradle-to-bazel'
+    description = 'android gradle project generate bazel build'
+    tags = ['android', 'gradle', 'bazel']
+
+    plugins {
+        publishPlugin {
+            // id is captured from java-gradle-plugin configuration
+            displayName = artifactName
+        }
+    }
+}
 
 apply plugin: 'groovy'
 apply from: 'publish.gradle'

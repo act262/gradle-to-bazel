@@ -24,8 +24,12 @@ buildscript {
 
         classpath "com.jakewharton:butterknife-gradle-plugin:$butterknife"
 
-        classpath 'io.zcx.plugin:bazel:0.0.1-SNAPSHOT'
+//        classpath 'io.zcx.plugin:bazel:0.0.1-SNAPSHOT'
     }
+}
+
+plugins {
+    id 'io.zcx.plugin.bazel'
 }
 
 allprojects {
@@ -37,7 +41,7 @@ allprojects {
 }
 
 //apply plugin: io.zcx.plugin.bazel.GradleToBazelPlugin
-apply plugin: 'io.zcx.plugin.bazel'
+//apply plugin: 'io.zcx.plugin.bazel'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
