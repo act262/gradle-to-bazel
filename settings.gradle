@@ -1,1 +1,2 @@
 include ':app', ':module1', ':kotlin_module', ':java_module', ':android_library_module', ':butterknife_module'
+//include ':plugin'
