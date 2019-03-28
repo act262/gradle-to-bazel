@@ -1,8 +1,10 @@
 package io.zcx.plugin.bazel.util
 
 import org.apache.commons.io.FilenameUtils
+import org.gradle.api.Project
 
 import java.nio.file.Files
+import java.nio.file.Paths
 
 class FileUtils {
 
@@ -22,5 +24,22 @@ class FileUtils {
             Files.createSymbolicLink(linkTo.toPath(), targetFile.toPath())
             println " $targetFile <<---- link to ---->>  ${linkTo}"
         }
+    }
+
+    static String relativePath(File base, File path) {
+        base.toURI().relativize(path.toURI()).getPath();
+    }
+
+    /**
+     * Get a relative path to rootProject's dir
+     *
+     * i.e.
+     * rootDir ~/xxx/yyy
+     * path ~/xxx/yyy/xxx
+     *
+     * return xxx
+     */
+    static String relativeProjectPath(Project project) {
+        Paths.get(project.rootDir.path).relativize(Paths.get(project.projectDir.path)).toString()
     }
 }

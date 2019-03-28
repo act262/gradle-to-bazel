@@ -32,7 +32,7 @@ class BazelUtils {
     }
 
     static String getBazelProjectName(Project project) {
-        "//${project.name}"
+        "//${FileUtils.relativeProjectPath(project)}"
     }
 
     static String getBazelTargetName(Project project) {
