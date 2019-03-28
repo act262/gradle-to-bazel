@@ -103,7 +103,7 @@ public class TemplateGen {
         androidSourceSets.collect { it.java.srcDirs }.flatten().each { File dir ->
             // src/main/java/**
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
-            srcDirs += "'${srcDir}/**',"
+            srcDirs += "'${srcDir}/**/*.java','${srcDir}/**/*.kt',"
         }
 
         // Append annotationProcessor generate source
@@ -206,7 +206,7 @@ public class TemplateGen {
         androidSourceSets.collect { it.java.srcDirs }.flatten().each { File dir ->
             // src/main/java/**
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
-            srcDirs += "'${srcDir}/**',"
+            srcDirs += "'${srcDir}/**/*.java','${srcDir}/**/*.kt',"
         }
         srcDirs += "'build/generated/source/kapt/${variant.buildType.name}/**/*.java',"
         srcDirs += "'build/generated/source/apt/${variant.buildType.name}/**/*.java',"
