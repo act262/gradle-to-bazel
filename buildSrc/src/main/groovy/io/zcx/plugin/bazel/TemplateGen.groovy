@@ -10,8 +10,8 @@ import io.zcx.plugin.bazel.util.BazelUtils
 import io.zcx.plugin.bazel.util.DependenciesUtils
 import io.zcx.plugin.bazel.util.FileUtils
 import org.apache.velocity.VelocityContext
-import org.apache.velocity.app.Velocity
 import org.apache.velocity.app.VelocityEngine
+import org.apache.velocity.runtime.RuntimeConstants
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
@@ -24,7 +24,8 @@ public class TemplateGen {
 
     static {
         engine = new VelocityEngine()
-        engine.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, 'buildSrc/src/main/resources/templates');
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, 'class')
+        engine.setProperty('class.resource.loader.class', 'org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader')
         engine.init()
     }
 
@@ -42,7 +43,6 @@ public class TemplateGen {
         context.put('kotlin', true)
 
         def writer = new PrintWriter(BazelUtils.getWorkspaceFile(project))
-
         engine.mergeTemplate('WORKSPACE.ftl', 'UTF-8', context, writer)
 
         writer.close()
@@ -315,7 +315,7 @@ public class TemplateGen {
             context.put('aarExports', aarExports)
 
             // TODO: fix file path
-            def reader = new FileReader("buildSrc/src/main/resources/templates/aar_import.ftl")
+            def reader = TemplateGen.classLoader.getResource('aar_import.ftl').newReader()
             engine.evaluate(context, writer, "aar_import", reader)
         }
     }
