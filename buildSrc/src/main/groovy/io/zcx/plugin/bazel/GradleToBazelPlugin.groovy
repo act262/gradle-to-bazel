@@ -31,7 +31,10 @@ class GradleToBazelPlugin implements Plugin<Project> {
 
 
                     def taskName = "genBazel-${name}"
-                    rootProject.tasks.create(taskName, GenerateBazelTask, rootProject, variant)
+                    rootProject.tasks.create(taskName, GenerateBazelTask) {
+                        it.rootProject = rootProject
+                        it.variant = variant
+                    }
 
                     println " ===============> Create $taskName <=================="
                 }

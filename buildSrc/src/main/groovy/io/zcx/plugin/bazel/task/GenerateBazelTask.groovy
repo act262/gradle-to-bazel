@@ -2,23 +2,12 @@ package io.zcx.plugin.bazel.task
 
 import com.android.build.gradle.api.ApplicationVariant
 import io.zcx.plugin.bazel.TemplateGen
-import io.zcx.plugin.bazel.task.AbstractBazelGradleTask
 import org.gradle.api.Project
-
-import javax.inject.Inject
 
 class GenerateBazelTask extends AbstractBazelGradleTask {
 
     Project rootProject
     ApplicationVariant variant
-
-    @Inject
-    GenerateBazelTask(Project rootProject, ApplicationVariant variant) {
-        this.rootProject = rootProject
-        this.variant = variant
-
-        setDescription("Initial Bazel task for ${variant.name}")
-    }
 
     @Override
     void doTask() {
