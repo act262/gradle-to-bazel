@@ -17,6 +17,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.ResolvedArtifact
 import org.gradle.api.artifacts.ResolvedDependency
+import org.gradle.api.internal.artifacts.dependencies.DefaultSelfResolvingDependency
 
 public class TemplateGen {
 
@@ -126,6 +127,17 @@ public class TemplateGen {
         project.configurations.implementation.setCanBeResolved(true)
         project.configurations.api.setCanBeResolved(true)
 
+        (project.configurations.implementation.dependencies + project.configurations.api.dependencies).findAll {
+            it instanceof DefaultSelfResolvingDependency
+        }.collect { DefaultSelfResolvingDependency dependency ->
+            dependency.resolve()
+        }.flatten().each {
+            def file = it
+            def link = DependenciesUtils.getJarFile(project, it)
+
+            FileUtils.makeSureSymbolicLink(link, file)
+        }
+
         // pick only project dependency
         def projectDependency = project.configurations.implementation.dependencies.findAll {
             it instanceof ProjectDependency
@@ -151,26 +163,6 @@ public class TemplateGen {
         }
         context.put('aarDeps', aarDeps)
 
-        // Annotation processor
-        def apt
-        if (AndroidUtils.hasKotlinSupport(project)) {
-            project.configurations.kapt.setCanBeResolved(true)
-            apt = project.configurations.kapt.resolvedConfiguration.firstLevelModuleDependencies
-        } else {
-            project.configurations.annotationProcessor.setCanBeResolved(true)
-            apt = project.configurations.annotationProcessor.resolvedConfiguration.firstLevelModuleDependencies
-        }
-
-        def resolvedArtifactSet = new HashSet<ResolvedArtifact>(30)
-        apt.each {
-            resolvedArtifactSet += it.allModuleArtifacts
-        }
-        resolvedArtifactSet.each {
-            def file = it.file
-            def link = DependenciesUtils.getAptArtifactFile(project, it)
-
-            FileUtils.makeSureSymbolicLink(link, file)
-        }
 
         def writer = new PrintWriter(BazelUtils.getBuildFile(project))
         engine.mergeTemplate("BUILD_application.ftl", "UTF-8", context, writer)
@@ -208,6 +200,7 @@ public class TemplateGen {
             def srcDir = BazelUtils.getTargetPath(project.projectDir, dir)
             srcDirs += "'${srcDir}/**/*.java','${srcDir}/**/*.kt',"
         }
+        srcDirs += "'build/generated/source/buildConfig/${variant.buildType.name}/**/*.java',"
         srcDirs += "'build/generated/source/kapt/${variant.buildType.name}/**/*.java',"
         srcDirs += "'build/generated/source/apt/${variant.buildType.name}/**/*.java',"
         srcDirs += "'build/generated/source/r2/${variant.buildType.name}/**/*.java',"
@@ -226,6 +219,18 @@ public class TemplateGen {
 
         project.configurations.implementation.setCanBeResolved(true)
         project.configurations.api.setCanBeResolved(true)
+
+        // local jar
+        (project.configurations.api.dependencies + project.configurations.implementation.dependencies).findAll {
+            it instanceof DefaultSelfResolvingDependency
+        }.collect { DefaultSelfResolvingDependency dependency ->
+            dependency.resolve()
+        }.flatten().each {
+            def file = it
+            def link = DependenciesUtils.getJarFile(project, it)
+
+            FileUtils.makeSureSymbolicLink(link, file)
+        }
 
         // pick only project dependency
         def projectDependency = project.configurations.implementation.dependencies.findAll {

@@ -57,6 +57,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dataBinding {
+        enabled true
+    }
 
     flavorDimensions 'api'
 
@@ -107,7 +110,7 @@ dependencies {
     implementation project(':module1')
 
     // local aar
-//    implementation ':module1:1.0@aar'
+    implementation ':module1:1.0@aar'
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -128,5 +131,5 @@ dependencies {
 
     implementation project(':butterknife_module')
 
-    implementation project(':databinding_module')
+//    implementation project(':databinding_module')
 }

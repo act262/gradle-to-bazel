@@ -18,6 +18,10 @@ class DependenciesUtils {
         new File(BazelUtils.getBazelDepsDir(project), "${getTargetPath(resolvedArtifact)}")
     }
 
+    static File getJarFile(Project project, File originFile) {
+        new File(BazelUtils.getBazelDepsDir(project), originFile.name)
+    }
+
     static File getAptArtifactFile(Project project, ResolvedArtifact resolvedArtifact) {
         new File(BazelUtils.getBazelAptDir(project, resolvedArtifact), "${getTargetPath(resolvedArtifact)}")
     }

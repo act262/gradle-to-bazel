@@ -24,7 +24,7 @@ Android: 26
 Just write into root project's `build.gradle`
 ```
 plugins {
-    id 'io.zcx.plugin.bazel'
+    id 'io.zcx.plugin.bazel' version $latest
 }
 
 ```
