@@ -41,7 +41,8 @@ public class TemplateGen {
         context.put('build_tools_version', '28.0.3')
         context.put('api_level', '28')
 
-        context.put('kotlin', true)
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        context.put('kotlin', AndroidUtils.usingKotlin(project))
 
         def writer = new PrintWriter(BazelUtils.getWorkspaceFile(project))
         engine.mergeTemplate('WORKSPACE.ftl', 'UTF-8', context, writer)
@@ -53,7 +54,7 @@ public class TemplateGen {
         def android = project.extensions.android as AppExtension
 
         def context = new VelocityContext()
-        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
+        context.put('kotlin', AndroidUtils.isKotlinProject(project))
 
 
         def androidSourceSets = AndroidUtils.collectSourceSet(android, variant)
@@ -178,7 +179,7 @@ public class TemplateGen {
         def androidSourceSets = AndroidUtils.collectSourceSet(android, variant)
 
         def context = new VelocityContext()
-        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
+        context.put('kotlin', AndroidUtils.isKotlinProject(project))
 
         context.put('name', BazelUtils.getBazelTargetName(project))
 
@@ -337,7 +338,7 @@ public class TemplateGen {
     static void genJavaLibraryBuild(Project project) {
 
         def context = new VelocityContext()
-        context.put('kotlin', AndroidUtils.hasKotlinSupport(project))
+        context.put('kotlin', AndroidUtils.isKotlinProject(project))
 
         context.put('name', BazelUtils.getBazelTargetName(project))
 

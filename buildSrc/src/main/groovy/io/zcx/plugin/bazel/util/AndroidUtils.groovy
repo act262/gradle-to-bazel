@@ -23,8 +23,21 @@ class AndroidUtils {
         project.plugins.hasPlugin("com.android.library")
     }
 
-    static boolean hasKotlinSupport(Project project) {
+    /**
+     * Is that project support kotlin.
+     */
+    static boolean isKotlinProject(Project project) {
         project.plugins.hasPlugin('kotlin-android')
+    }
+
+    /**
+     * Is that project using kotlin.
+     * @param project rootProject
+     */
+    static boolean usingKotlin(Project project) {
+        project.rootProject.buildscript.configurations.classpath.dependencies.any {
+            it.group == 'org.jetbrains.kotlin' && it.name == 'kotlin-gradle-plugin'
+        }
     }
 
     /**
